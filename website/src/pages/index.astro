@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "~/layouts/BaseLayout.astro";
+import TopNav from "~/components/TopNav.astro";
 import Hero from "~/features/landing/components/Hero.astro";
 ---
 
@@ -7,5 +8,6 @@ import Hero from "~/features/landing/components/Hero.astro";
   title="Valaris — agentic software factory"
   description="Valaris is the agentic software factory platform: research, plan, build, review, and ship software with multi-role AI agents."
 >
+  <TopNav slot="header" />
   <Hero />
 </BaseLayout>
