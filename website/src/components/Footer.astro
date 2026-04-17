@@ -1,0 +1,193 @@
+---
+type FooterLink = {
+  label: string;
+  href: string;
+};
+
+type FooterColumn = {
+  title: string;
+  links: ReadonlyArray<FooterLink>;
+};
+
+type SocialLink = {
+  label: string;
+  href: string;
+  icon: "github" | "twitter";
+};
+
+type Props = {
+  columns?: ReadonlyArray<FooterColumn>;
+  social?: ReadonlyArray<SocialLink>;
+  legalLinks?: ReadonlyArray<FooterLink>;
+};
+
+const DEFAULT_COLUMNS: ReadonlyArray<FooterColumn> = [
+  {
+    title: "Product",
+    links: [
+      { label: "Overview", href: "/product" },
+      { label: "Pricing", href: "/pricing" },
+      { label: "Request a demo", href: "/demo" },
+    ],
+  },
+  {
+    title: "Solutions",
+    links: [
+      { label: "Platform teams", href: "/solutions#platform-teams" },
+      { label: "Startups", href: "/solutions#startups" },
+      { label: "Internal tools", href: "/solutions#internal-tools" },
+    ],
+  },
+  {
+    title: "Docs",
+    links: [
+      { label: "Documentation", href: "/docs" },
+      { label: "Changelog", href: "/docs/changelog" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "About", href: "/company" },
+      { label: "Contact", href: "/company#contact" },
+    ],
+  },
+];
+
+const DEFAULT_SOCIAL: ReadonlyArray<SocialLink> = [
+  {
+    label: "Valaris on GitHub",
+    href: "https://github.com/Valaris-Studio",
+    icon: "github",
+  },
+  {
+    label: "Valaris on X",
+    href: "https://x.com/valaris_studio",
+    icon: "twitter",
+  },
+];
+
+const DEFAULT_LEGAL: ReadonlyArray<FooterLink> = [
+  { label: "Privacy", href: "/privacy" },
+  { label: "Terms", href: "/terms" },
+];
+
+const {
+  columns = DEFAULT_COLUMNS,
+  social = DEFAULT_SOCIAL,
+  legalLinks = DEFAULT_LEGAL,
+} = Astro.props;
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer
+  class="border-t border-[color:var(--color-border)] bg-[color:var(--color-surface)] text-[color:var(--color-fg)]"
+  aria-labelledby="footer-heading"
+>
+  <h2 id="footer-heading" class="sr-only">Site footer</h2>
+
+  <div class="mx-auto w-full max-w-6xl px-6 py-12 lg:px-8 lg:py-16">
+    <div class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[1.25fr_repeat(4,1fr)] lg:gap-8">
+      <div class="flex flex-col gap-4">
+        <a
+          href="/"
+          class="inline-flex w-fit items-center gap-2 rounded-md text-sm font-semibold tracking-tight text-[color:var(--color-fg)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+          aria-label="Valaris — home"
+        >
+          <span
+            aria-hidden="true"
+            class="inline-block h-6 w-6 rounded-md bg-accent"></span>
+          <span>Valaris</span>
+        </a>
+        <p class="max-w-xs text-sm text-[color:var(--color-muted)]">
+          The agentic software factory. Research, plan, build, review, and ship
+          with multi-role agents.
+        </p>
+        <ul class="mt-2 flex items-center gap-2">
+          {
+            social.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  aria-label={item.label}
+                  class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-bg)] text-[color:var(--color-muted)] transition-colors hover:text-[color:var(--color-fg)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                >
+                  {item.icon === "github" ? (
+                    <svg
+                      aria-hidden="true"
+                      focusable="false"
+                      viewBox="0 0 24 24"
+                      width="18"
+                      height="18"
+                      fill="currentColor"
+                    >
+                      <path d="M12 .5C5.73.5.75 5.48.75 11.75c0 4.96 3.22 9.17 7.69 10.65.56.1.77-.24.77-.54 0-.27-.01-1.16-.02-2.1-3.13.68-3.79-1.34-3.79-1.34-.51-1.3-1.25-1.65-1.25-1.65-1.02-.7.08-.69.08-.69 1.13.08 1.72 1.16 1.72 1.16 1 1.72 2.63 1.22 3.27.93.1-.73.39-1.22.71-1.5-2.5-.29-5.13-1.25-5.13-5.56 0-1.23.44-2.23 1.16-3.02-.12-.29-.5-1.44.11-3 0 0 .95-.3 3.12 1.15a10.8 10.8 0 0 1 2.84-.38c.96 0 1.93.13 2.84.38 2.17-1.45 3.12-1.15 3.12-1.15.61 1.56.23 2.71.11 3 .72.79 1.16 1.79 1.16 3.02 0 4.32-2.63 5.27-5.14 5.55.4.35.76 1.03.76 2.08 0 1.5-.01 2.7-.01 3.07 0 .3.2.65.78.54 4.47-1.48 7.69-5.69 7.69-10.65C23.25 5.48 18.27.5 12 .5z" />
+                    </svg>
+                  ) : (
+                    <svg
+                      aria-hidden="true"
+                      focusable="false"
+                      viewBox="0 0 24 24"
+                      width="18"
+                      height="18"
+                      fill="currentColor"
+                    >
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z" />
+                    </svg>
+                  )}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      {
+        columns.map((col) => (
+          <div>
+            <h3 class="text-sm font-semibold text-[color:var(--color-fg)]">
+              {col.title}
+            </h3>
+            <ul class="mt-4 flex flex-col gap-3">
+              {col.links.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class="text-sm text-[color:var(--color-muted)] transition-colors hover:text-[color:var(--color-fg)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    <div
+      class="mt-12 flex flex-col gap-4 border-t border-[color:var(--color-border)] pt-6 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p class="text-xs text-[color:var(--color-muted)]">
+        &copy; {currentYear} Valaris. All rights reserved.
+      </p>
+      <ul class="flex items-center gap-6">
+        {
+          legalLinks.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="text-xs text-[color:var(--color-muted)] transition-colors hover:text-[color:var(--color-fg)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</footer>
