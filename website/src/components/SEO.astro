@@ -1,0 +1,66 @@
+---
+import { buildSEO } from "~/lib/seo";
+
+type Props = {
+  title: string;
+  description: string;
+  canonical?: string;
+  image?: string;
+  noindex?: boolean;
+};
+
+const { title, description, canonical, image, noindex } = Astro.props;
+
+const seo = buildSEO({
+  site: Astro.site ?? "https://valaris.studio",
+  pathname: Astro.url.pathname,
+  title,
+  description,
+  canonical,
+  image,
+  noindex,
+});
+
+const organizationLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Valaris",
+  url: new URL(Astro.site ?? "https://valaris.studio").origin,
+  logo: new URL("/logo.png", Astro.site ?? "https://valaris.studio").toString(),
+};
+
+const websiteLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Valaris",
+  url: new URL(Astro.site ?? "https://valaris.studio").origin,
+};
+---
+
+<title>{seo.title}</title>
+<meta name="description" content={seo.description} />
+<link rel="canonical" href={seo.canonical} />
+<meta name="robots" content={seo.robots} />
+
+<meta property="og:type" content={seo.ogType} />
+<meta property="og:title" content={seo.title} />
+<meta property="og:description" content={seo.description} />
+<meta property="og:url" content={seo.canonical} />
+<meta property="og:image" content={seo.image} />
+<meta property="og:site_name" content="Valaris" />
+
+<meta name="twitter:card" content={seo.twitterCard} />
+<meta name="twitter:title" content={seo.title} />
+<meta name="twitter:description" content={seo.description} />
+<meta name="twitter:image" content={seo.image} />
+
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify(organizationLd)}
+/>
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify(websiteLd)}
+/>
