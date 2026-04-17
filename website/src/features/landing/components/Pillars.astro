@@ -1,0 +1,53 @@
+---
+import { getEntry } from "astro:content";
+import PillarCard from "./PillarCard.astro";
+import type { PillarIconName } from "./PillarIcon.astro";
+
+const entry = await getEntry("landing", "pillars");
+if (!entry) {
+  throw new Error(
+    'Missing landing/pillars content entry. Expected src/content/landing/pillars.mdx with `kind: pillars`.',
+  );
+}
+if (entry.data.kind !== "pillars") {
+  throw new Error(
+    `landing/pillars entry has unexpected kind "${entry.data.kind}"; expected "pillars".`,
+  );
+}
+
+const SUPPORTED_ICONS = ["Search", "GitPullRequest", "Activity"] as const;
+type SupportedIcon = (typeof SUPPORTED_ICONS)[number];
+
+const isSupportedIcon = (value: string): value is SupportedIcon =>
+  (SUPPORTED_ICONS as ReadonlyArray<string>).includes(value);
+
+const pillars = entry.data.pillars.map((pillar) => {
+  if (!isSupportedIcon(pillar.icon)) {
+    throw new Error(
+      `Unknown pillar icon "${pillar.icon}". Add it to PillarIcon.astro before using.`,
+    );
+  }
+  const icon: PillarIconName = pillar.icon;
+  return { ...pillar, icon };
+});
+---
+
+<section
+  aria-labelledby="pillars-heading"
+  class="mx-auto w-full max-w-5xl px-6 py-20 sm:py-24 lg:px-8"
+>
+  <h2 id="pillars-heading" class="sr-only">Product pillars</h2>
+  <ul class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+    {
+      pillars.map((pillar) => (
+        <li class="h-full">
+          <PillarCard
+            icon={pillar.icon}
+            title={pillar.title}
+            description={pillar.description}
+          />
+        </li>
+      ))
+    }
+  </ul>
+</section>
