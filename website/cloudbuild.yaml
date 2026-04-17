@@ -13,9 +13,8 @@ steps:
       - |
         set -e
         corepack enable
-        corepack prepare pnpm@latest --activate
-        cd website
-        pnpm install --prefer-offline 2>&1 | tail -5
+        corepack prepare pnpm@9.15.0 --activate
+        pnpm install --frozen-lockfile --filter @valaris/website 2>&1 | tail -5
     waitFor: ["-"]
 
   # ── Typecheck (astro check = TS + Astro diagnostics) ──
@@ -27,9 +26,8 @@ steps:
       - |
         set -e
         corepack enable
-        corepack prepare pnpm@latest --activate
-        cd website
-        pnpm check
+        corepack prepare pnpm@9.15.0 --activate
+        pnpm --filter @valaris/website check
     waitFor: ["install"]
 
   # ── Unit tests (skipped gracefully until a test runner is wired up) ──
@@ -41,7 +39,7 @@ steps:
       - |
         set -e
         corepack enable
-        corepack prepare pnpm@latest --activate
+        corepack prepare pnpm@9.15.0 --activate
         cd website
         if node -e "process.exit(require('./package.json').scripts.test ? 0 : 1)"; then
           pnpm test
@@ -59,9 +57,8 @@ steps:
       - |
         set -e
         corepack enable
-        corepack prepare pnpm@latest --activate
-        cd website
-        pnpm build
+        corepack prepare pnpm@9.15.0 --activate
+        pnpm --filter @valaris/website build
     waitFor: ["typecheck", "test"]
 
   # ── Lighthouse CI (fails the build if budgets regress) ──
@@ -73,17 +70,18 @@ steps:
       - |
         set -e
         corepack enable
-        corepack prepare pnpm@latest --activate
+        corepack prepare pnpm@9.15.0 --activate
         cd website
         pnpm dlx @lhci/cli@0.14.x autorun --config=./lighthouserc.json
     waitFor: ["build-site"]
 
   # ── Container build (Kaniko — matches frontend/backend patterns) ──
+  # Context is repo root so the Dockerfile can COPY pnpm-lock.yaml + pnpm-workspace.yaml.
   - id: build-image
     name: gcr.io/kaniko-project/executor:latest
     args:
       - --dockerfile=website/Dockerfile
-      - --context=dir://website
+      - --context=dir:///workspace
       - --destination=${_REGION}-docker.pkg.dev/${PROJECT_ID}/valaris/website:${_TAG}
       - --destination=${_REGION}-docker.pkg.dev/${PROJECT_ID}/valaris/website:latest
       - --cache=true
