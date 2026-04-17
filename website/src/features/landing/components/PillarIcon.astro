@@ -1,0 +1,49 @@
+---
+export type PillarIconName = "Search" | "GitPullRequest" | "Activity";
+
+type Props = {
+  name: PillarIconName;
+};
+
+const { name } = Astro.props;
+
+const SVG_ATTRS = {
+  width: 22,
+  height: 22,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  "stroke-width": 2,
+  "stroke-linecap": "round" as const,
+  "stroke-linejoin": "round" as const,
+  "aria-hidden": "true" as const,
+  focusable: "false" as const,
+};
+---
+
+{
+  name === "Search" && (
+    <svg {...SVG_ATTRS}>
+      <circle cx="11" cy="11" r="7" />
+      <path d="m21 21-4.3-4.3" />
+    </svg>
+  )
+}
+{
+  name === "GitPullRequest" && (
+    <svg {...SVG_ATTRS}>
+      <circle cx="6" cy="6" r="3" />
+      <circle cx="6" cy="18" r="3" />
+      <path d="M6 9v6" />
+      <circle cx="18" cy="18" r="3" />
+      <path d="M13 6h3a2 2 0 0 1 2 2v7" />
+    </svg>
+  )
+}
+{
+  name === "Activity" && (
+    <svg {...SVG_ATTRS}>
+      <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.5.5 0 0 1-.96 0L9.68 3.18a.5.5 0 0 0-.96 0l-2.35 8.36A2 2 0 0 1 4.44 13H2" />
+    </svg>
+  )
+}
