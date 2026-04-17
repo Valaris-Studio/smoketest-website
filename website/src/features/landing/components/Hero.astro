@@ -1,0 +1,56 @@
+---
+import { getEntry } from "astro:content";
+
+const entry = await getEntry("landing", "hero");
+if (!entry) {
+  throw new Error(
+    "Missing landing/hero content entry. Expected src/content/landing/hero.mdx with `kind: hero`.",
+  );
+}
+if (entry.data.kind !== "hero") {
+  throw new Error(
+    `landing/hero entry has unexpected kind "${entry.data.kind}"; expected "hero".`,
+  );
+}
+
+const { headline, subhead, primaryCta, secondaryCta } = entry.data;
+---
+
+<section
+  aria-labelledby="hero-heading"
+  class="mx-auto flex w-full max-w-5xl flex-col items-start px-6 pt-24 pb-20 sm:pt-32 sm:pb-28 lg:px-8"
+>
+  <p
+    class="font-mono text-xs uppercase tracking-[0.2em] text-[color:var(--color-muted)]"
+  >
+    Valaris
+  </p>
+
+  <h1
+    id="hero-heading"
+    class="mt-5 max-w-3xl text-balance text-4xl font-semibold tracking-tight text-[color:var(--color-fg)] sm:text-5xl lg:text-6xl"
+  >
+    {headline}
+  </h1>
+
+  <p
+    class="mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-[color:var(--color-muted)] sm:text-xl"
+  >
+    {subhead}
+  </p>
+
+  <div class="mt-10 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-4">
+    <a
+      href={primaryCta.href}
+      class="inline-flex items-center justify-center rounded-lg bg-[color:var(--color-accent)] px-5 py-3 text-base font-medium text-white shadow-sm transition-colors hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent)]"
+    >
+      {primaryCta.text}
+    </a>
+    <a
+      href={secondaryCta.href}
+      class="inline-flex items-center justify-center rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-surface)] px-5 py-3 text-base font-medium text-[color:var(--color-fg)] transition-colors hover:border-[color:var(--color-fg)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent)]"
+    >
+      {secondaryCta.text}
+    </a>
+  </div>
+</section>
