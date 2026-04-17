@@ -107,8 +107,8 @@ pnpm --filter @valaris/website build         # build-site step
 # lighthouse step: run from website/ so lighthouserc.json resolves correctly
 cd website && pnpm dlx @lhci/cli@0.14.x autorun
 
-# image step
-docker build -t valaris-website -f website/Dockerfile website
+# image step (build context must be the repo root so pnpm-lock.yaml is available)
+docker build -t valaris-website -f website/Dockerfile .
 docker run --rm -p 8080:8080 valaris-website
 ```
 
