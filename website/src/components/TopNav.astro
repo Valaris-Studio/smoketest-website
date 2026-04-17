@@ -38,12 +38,12 @@ const {
       <slot name="logo">
         <a
           href="/"
-          class="inline-flex items-center gap-2 rounded-md text-sm font-semibold tracking-tight text-[color:var(--color-fg)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--color-accent)]"
+          class="inline-flex items-center gap-2 rounded-md text-sm font-semibold tracking-tight text-[color:var(--color-fg)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
           aria-label="Valaris — home"
         >
           <span
             aria-hidden="true"
-            class="inline-block h-6 w-6 rounded-md bg-[color:var(--color-accent)]"
+            class="inline-block h-6 w-6 rounded-md bg-accent"
           ></span>
           <span>Valaris</span>
         </a>
@@ -57,7 +57,7 @@ const {
                 <li>
                   <a
                     href={link.href}
-                    class="text-sm text-[color:var(--color-muted)] transition-colors hover:text-[color:var(--color-fg)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--color-accent)]"
+                    class="text-sm text-[color:var(--color-muted)] transition-colors hover:text-[color:var(--color-fg)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
                   >
                     {link.label}
                   </a>
@@ -73,7 +73,7 @@ const {
       <slot name="cta">
         <a
           href={ctaHref}
-          class="hidden items-center justify-center rounded-lg bg-[color:var(--color-accent)] px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent)] md:inline-flex"
+          class="hidden items-center justify-center rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent md:inline-flex"
         >
           {ctaText}
         </a>

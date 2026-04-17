@@ -6,7 +6,7 @@
   --color-fg: #0b0d10;
   --color-muted: #5b6470;
   --color-border: #e5e7eb;
-  --color-accent: #2c5cff;
+  --color-accent: oklch(0.47 0.19 264);
 
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -14,14 +14,16 @@
     Consolas, "Liberation Mono", monospace;
 }
 
-/* Explicit dark theme — selected by the inline script on <html data-theme="dark">. */
+/* Explicit dark theme — selected by the inline script on <html data-theme="dark">.
+   --color-accent is kept identical to light mode (oklch(0.47 0.19 264) ≈ #2c5cff)
+   so white-on-accent CTAs hit ≥ 4.5:1 (WCAG 2.2 AA) in both themes. */
 html[data-theme="dark"] {
   --color-bg: #0b0d10;
   --color-surface: #14171c;
   --color-fg: #f5f6f7;
   --color-muted: #9aa3af;
   --color-border: #232830;
-  --color-accent: #6f8dff;
+  --color-accent: oklch(0.47 0.19 264);
 }
 
 /* Fallback for the brief window before the inline script runs, or if JS is
@@ -33,7 +35,7 @@ html[data-theme="dark"] {
     --color-fg: #f5f6f7;
     --color-muted: #9aa3af;
     --color-border: #232830;
-    --color-accent: #6f8dff;
+    --color-accent: oklch(0.47 0.19 264);
   }
 }
 

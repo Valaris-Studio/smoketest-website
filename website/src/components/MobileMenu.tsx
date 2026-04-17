@@ -92,7 +92,7 @@ export default function MobileMenu({
         aria-controls={panelId}
         aria-label="Open menu"
         onClick={() => setOpen((prev) => !prev)}
-        className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-surface)] text-[color:var(--color-fg)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent)]"
+        className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-surface)] text-[color:var(--color-fg)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         <HamburgerIcon open={open} />
       </button>
@@ -114,7 +114,7 @@ export default function MobileMenu({
               type="button"
               aria-label="Close menu"
               onClick={close}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-surface)] text-[color:var(--color-fg)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent)]"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-surface)] text-[color:var(--color-fg)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               <CloseIcon />
             </button>
@@ -128,7 +128,7 @@ export default function MobileMenu({
                 key={link.href}
                 href={link.href}
                 onClick={close}
-                className="rounded-md px-3 py-3 text-lg font-medium text-[color:var(--color-fg)] hover:bg-[color:var(--color-surface)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent)]"
+                className="rounded-md px-3 py-3 text-lg font-medium text-[color:var(--color-fg)] hover:bg-[color:var(--color-surface)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
                 {link.label}
               </a>
@@ -139,7 +139,7 @@ export default function MobileMenu({
               <a
                 href={ctaHref}
                 onClick={close}
-                className="inline-flex w-full items-center justify-center rounded-lg bg-[color:var(--color-accent)] px-5 py-3 text-base font-medium text-white shadow-sm transition-colors hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent)]"
+                className="inline-flex w-full items-center justify-center rounded-lg bg-accent px-5 py-3 text-base font-medium text-white shadow-sm transition-colors hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
                 {ctaText}
               </a>
