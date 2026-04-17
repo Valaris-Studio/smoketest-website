@@ -1,0 +1,115 @@
+substitutions:
+  _REGION: "us-central1"
+  _SERVICE: "valaris-website"
+  _TAG: "latest"
+
+steps:
+  # ── Install dependencies (cached on subsequent steps via the shared workspace) ──
+  - id: install
+    name: node:22-slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -e
+        corepack enable
+        corepack prepare pnpm@latest --activate
+        cd website
+        pnpm install --prefer-offline 2>&1 | tail -5
+    waitFor: ["-"]
+
+  # ── Typecheck (astro check = TS + Astro diagnostics) ──
+  - id: typecheck
+    name: node:22-slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -e
+        corepack enable
+        corepack prepare pnpm@latest --activate
+        cd website
+        pnpm check
+    waitFor: ["install"]
+
+  # ── Unit tests (skipped gracefully until a test runner is wired up) ──
+  - id: test
+    name: node:22-slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -e
+        corepack enable
+        corepack prepare pnpm@latest --activate
+        cd website
+        if node -e "process.exit(require('./package.json').scripts.test ? 0 : 1)"; then
+          pnpm test
+        else
+          echo "No test script defined yet — skipping."
+        fi
+    waitFor: ["install"]
+
+  # ── Build the static site ──
+  - id: build-site
+    name: node:22-slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -e
+        corepack enable
+        corepack prepare pnpm@latest --activate
+        cd website
+        pnpm build
+    waitFor: ["typecheck", "test"]
+
+  # ── Lighthouse CI (fails the build if budgets regress) ──
+  - id: lighthouse
+    name: cypress/browsers:node-22.11.0-chrome-131.0.6778.85-1-ff-133.0-edge-131.0.2903.70-1
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -e
+        corepack enable
+        corepack prepare pnpm@latest --activate
+        cd website
+        pnpm dlx @lhci/cli@0.14.x autorun --config=./lighthouserc.json
+    waitFor: ["build-site"]
+
+  # ── Container build (Kaniko — matches frontend/backend patterns) ──
+  - id: build-image
+    name: gcr.io/kaniko-project/executor:latest
+    args:
+      - --dockerfile=website/Dockerfile
+      - --context=dir://website
+      - --destination=${_REGION}-docker.pkg.dev/${PROJECT_ID}/valaris/website:${_TAG}
+      - --destination=${_REGION}-docker.pkg.dev/${PROJECT_ID}/valaris/website:latest
+      - --cache=true
+      - --cache-ttl=168h
+    waitFor: ["lighthouse"]
+
+  # ── Deploy to Cloud Run ──
+  - id: deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -e
+        gcloud run deploy ${_SERVICE} \
+          --image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/valaris/website:${_TAG} \
+          --region=${_REGION} \
+          --platform=managed \
+          --allow-unauthenticated \
+          --port=8080 \
+          --min-instances=0 \
+          --max-instances=3 \
+          --memory=256Mi \
+          --cpu=1
+    waitFor: ["build-image"]
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: E2_HIGHCPU_8
