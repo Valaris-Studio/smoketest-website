@@ -1,4 +1,5 @@
 ---
+import { Font } from "astro:assets";
 import "~/styles/global.css";
 import SEO from "~/components/SEO.astro";
 
@@ -36,18 +37,7 @@ const {
       noindex={noindex}
     />
 
-    {
-      /* Font preload — Inter variable as placeholder.
-         TODO: revisit once typography research note lands (see board note
-         "Design Philosophy & Brand Voice") and @fontsource/* is wired into the build. */
-    }
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="/fonts/inter-variable.woff2"
-      crossorigin="anonymous"
-    />
+    <Font cssVariable="--font-inter" preload />
 
     {/* Applied before paint: prevents FOUC by setting data-theme on <html>
         based on stored preference, falling back to prefers-color-scheme. */}
